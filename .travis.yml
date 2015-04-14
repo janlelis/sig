@@ -1,0 +1,18 @@
+sudo: false
+language: ruby
+
+script: bundle exec ruby spec/sig_spec.rb
+
+rvm:
+- 2.2
+- 2.1
+- 2.0
+- rbx-2
+- jruby-9000
+
+cache:
+- bundler
+
+matrix:
+  allow_failures:
+    - rvm: jruby-9000
