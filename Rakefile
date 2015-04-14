@@ -29,6 +29,7 @@ task :irb do
   sh "irb -I ./lib -r #{gemspec.name.gsub '-','/'}"
 end
 
+
 # # #
 # Benchmark: Take with a grain of salt
 
@@ -106,32 +107,50 @@ task :benchmark do
   puts "contracts version: #{Contracts::VERSION}"
 
   Benchmark.ips do |x|
-    x.report("pure"){
-      pure_instance.sum(1, 2)
-      pure_instance.mul(1, 2)
+    x.report("pure"){ |times|
+      i = 0
+      while i < times
+        pure_instance.sum(1, 2)
+        pure_instance.mul(1, 2)
+        i += 1
+      end
     }
 
-    x.report("sig"){
-      sig_instance.sum(1, 2)
-      sig_instance.mul(1, 2)
+    x.report("sig"){ |times|
+      i = 0
+      while i < times
+        sig_instance.sum(1, 2)
+        sig_instance.mul(1, 2)
+        i += 1
+      end
     }
 
-    x.report("rubype"){
-      rubype_instance.sum(1, 2)
-      rubype_instance.mul(1, 2)
+    x.report("rubype"){ |times|
+      i = 0
+      while i < times
+        rubype_instance.sum(1, 2)
+        rubype_instance.mul(1, 2)
+        i += 1
+      end
     }
 
-    x.report("contracts"){
-      contracts_instance.sum(1, 2)
-      contracts_instance.mul(1, 2)
+    x.report("contracts"){ |times|
+      i = 0
+      while i < times
+        contracts_instance.sum(1, 2)
+        contracts_instance.mul(1, 2)
+        i += 1
+      end
     }
-    x.warmup = 10
+
     x.compare!
   end
 end
 
+
 # # #
 # Specs
+
 desc "Run specs"
 task :spec do
   ruby "spec/sig_spec.rb"
