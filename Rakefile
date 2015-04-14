@@ -64,7 +64,7 @@ task :benchmark do
       x + y
     end
 
-    sig [Numeric, Numeric], Numeric,
+    sig [:to_i, :to_i], Numeric,
     def mul(x, y)
       x * y
     end
@@ -83,7 +83,7 @@ task :benchmark do
     def mul(x, y)
       x * y
     end
-    typesig :mul, [Numeric, Numeric] => Numeric
+    typesig :mul, [:to_i, :to_i] => Numeric
   end
   rubype_instance = RubypeSum.new
   puts "rubype version: #{Rubype::VERSION}"
@@ -98,7 +98,7 @@ task :benchmark do
       x + y
     end
 
-    Contract Num, Num => Num
+    Contract RespondTo[:to_i], RespondTo[:to_i] => Num
     def mul(x, y)
       x * y
     end
