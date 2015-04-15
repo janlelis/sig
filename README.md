@@ -20,6 +20,7 @@ class A
     a * b
   end
 end
+
 A.new.mul(4,"3")
 # Sig::ArgumentTypeError:
 # - Expected "3" to be a Numeric, but is a String
@@ -32,6 +33,7 @@ class B
     object.reverse
   end
 end
+
 B.rev 42
 # Sig::ArgumentTypeError:
 # - Expected 42 to respond to :reverse
@@ -96,13 +98,38 @@ sig [Numeric, nil,  Numeric],      # first and third argument must be numeric, d
 
 See source(https://github.com/janlelis/sig/blob/master/lib/sig.rb) or specs(https://github.com/janlelis/sig/blob/master/spec/sig_spec.rb) for more features.
 
-## Deactivate all signature checking
+## Benchmark (Take with a Grain of Salt)
+
+```
+ruby version: 2.2.2
+sig version: 1.0.1
+rubype version: 0.2.5
+contracts version: 0.8
+Calculating -------------------------------------
+                pure    59.389k i/100ms
+                 sig     9.386k i/100ms
+              rubype     8.343k i/100ms
+           contracts     5.011k i/100ms
+-------------------------------------------------
+                pure      4.660M (± 0.6%) i/s -     23.340M
+                 sig    136.535k (± 0.7%) i/s -    685.178k
+              rubype    112.444k (± 0.4%) i/s -    567.324k
+           contracts     60.699k (± 0.4%) i/s -    305.671k
+
+Comparison:
+                pure:  4660112.0 i/s
+                 sig:   136535.0 i/s - 34.13x slower
+              rubype:   112443.6 i/s - 41.44x slower
+           contracts:    60698.9 i/s - 76.77x slower
+```
+
+## Deactivate All Signature Checking
 
 ```ruby
 require 'sig/none' # instead of require 'sig'
 ```
 
-## Alternatives for type checking and more
+## Alternatives for Type Checking and More
 
 - https://github.com/gogotanaka/Rubype
 - https://github.com/egonSchiele/contracts.ruby
