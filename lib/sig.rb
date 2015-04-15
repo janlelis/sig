@@ -20,10 +20,11 @@ module Sig
     signature_checker = get_or_create_signature_checker(object)
     signature_checker.send :define_method, method_name do |*arguments, **keyword_arguments|
       if keyword_arguments.empty?
-        ::Sig.check_arguments(expected_arguments, arguments, expected_keyword_arguments)
+        ::Sig.check_arguments(expected_arguments, arguments)
         result = super(*arguments)
       else
-        ::Sig.check_arguments(expected_arguments, arguments, expected_keyword_arguments, keyword_arguments)
+        ::Sig.check_arguments_with_keywords(expected_arguments, arguments,
+                                            expected_keyword_arguments, keyword_arguments)
         result = super(*arguments, **keyword_arguments)
       end
       ::Sig.check_result(expected_result, result)
@@ -58,7 +59,22 @@ module Sig
     checker
   end
 
-  def self.check_arguments(expected_arguments, arguments, expected_keyword_arguments, keyword_arguments = nil)
+  def self.check_arguments(expected_arguments, arguments)
+    errors = ""
+
+    arguments.each_with_index{ |argument, index|
+      if error = valid_or_formatted_error(expected_arguments[index], argument)
+        errors << error
+      end
+    }
+
+    unless errors.empty?
+      raise ArgumentTypeError, errors
+    end
+  end
+
+  def self.check_arguments_with_keywords(expected_arguments, arguments,
+                                         expected_keyword_arguments, keyword_arguments)
     errors = ""
 
     arguments.each_with_index{ |argument, index|
@@ -73,8 +89,7 @@ module Sig
           errors << error
         end
       }
-    elsif keyword_arguments &&
-        error = valid_or_formatted_error(expected_arguments[arguments.size], keyword_arguments)
+    elsif error = valid_or_formatted_error(expected_arguments[arguments.size], keyword_arguments)
       errors << error
     end
 
