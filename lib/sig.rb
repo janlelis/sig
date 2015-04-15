@@ -9,13 +9,21 @@ module Sig
   end
 
   def self.define(object, expected_arguments, expected_result = nil, method_name)
+    expected_arguments = Array(expected_arguments)
+    if expected_arguments.last.is_a?(Hash)
+      expected_keyword_arguments = expected_arguments.delete_at(-1)
+    else
+      expected_keyword_arguments = nil
+    end
+
     method_visibility = get_method_visibility_or_raise(object, method_name)
     signature_checker = get_or_create_signature_checker(object)
     signature_checker.send :define_method, method_name do |*arguments, **keyword_arguments|
-      ::Sig.check_arguments(expected_arguments, arguments, keyword_arguments)
       if keyword_arguments.empty?
+        ::Sig.check_arguments(expected_arguments, arguments, expected_keyword_arguments)
         result = super(*arguments)
       else
+        ::Sig.check_arguments(expected_arguments, arguments, expected_keyword_arguments, keyword_arguments)
         result = super(*arguments, **keyword_arguments)
       end
       ::Sig.check_result(expected_result, result)
@@ -50,29 +58,24 @@ module Sig
     checker
   end
 
-  def self.check_arguments(expected_arguments, arguments, keyword_arguments)
+  def self.check_arguments(expected_arguments, arguments, expected_keyword_arguments, keyword_arguments = nil)
     errors = ""
 
-    normalized_expected_arguments = Array(expected_arguments).dup
-    if  normalized_expected_arguments.last.is_a?(Hash)
-      expected_keyword_arguments = normalized_expected_arguments.delete_at(-1)
-    elsif keyword_arguments
-      expected_keyword_arguments = {}
-      arguments += [keyword_arguments] unless keyword_arguments.empty?
-    end
-
     arguments.each_with_index{ |argument, index|
-      if error = valid_or_formatted_error(normalized_expected_arguments[index], argument)
+      if error = valid_or_formatted_error(expected_arguments[index], argument)
         errors << error
       end
     }
 
-    unless expected_keyword_arguments.empty?
-      keyword_arguments.each{ |key, argument|
-        if error = valid_or_formatted_error(expected_keyword_arguments[key], argument)
+    if expected_keyword_arguments
+      keyword_arguments.each{ |key, keyword_argument|
+        if error = valid_or_formatted_error(expected_keyword_arguments[key], keyword_argument)
           errors << error
         end
       }
+    elsif keyword_arguments &&
+        error = valid_or_formatted_error(expected_arguments[arguments.size], keyword_arguments)
+      errors << error
     end
 
     unless errors.empty?
