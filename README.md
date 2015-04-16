@@ -123,6 +123,8 @@ Comparison:
            contracts:    60698.9 i/s - 76.77x slower
 ```
 
+There is still a lot room for performance improvements. Feel free to suggest some faster implementation to do the type checks (even if it is crazy and not clean, as long it does not add too much "magic", a.k.a does not make debugging harder).
+
 ## Deactivate All Signature Checking
 
 ```ruby
