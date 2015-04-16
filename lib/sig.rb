@@ -9,6 +9,8 @@ module Sig
   end
 
   def self.define(object, expected_arguments, expected_result = nil, method_name)
+    no_argument_checks = expected_arguments.nil?
+
     expected_arguments = Array(expected_arguments)
     if expected_arguments.last.is_a?(Hash)
       expected_keyword_arguments = expected_arguments.delete_at(-1)
@@ -20,14 +22,15 @@ module Sig
     signature_checker = get_or_create_signature_checker(object)
     signature_checker.send :define_method, method_name do |*arguments, **keyword_arguments|
       if keyword_arguments.empty?
-        ::Sig.check_arguments(expected_arguments, arguments)
+        ::Sig.check_arguments(expected_arguments, arguments) unless no_argument_checks
         result = super(*arguments)
       else
         ::Sig.check_arguments_with_keywords(expected_arguments, arguments,
-                                            expected_keyword_arguments, keyword_arguments)
+                                            expected_keyword_arguments,
+                                            keyword_arguments) unless no_argument_checks
         result = super(*arguments, **keyword_arguments)
       end
-      ::Sig.check_result(expected_result, result)
+      ::Sig.check_result(expected_result, result) unless expected_result.nil?
 
       result
     end
