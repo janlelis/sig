@@ -44,6 +44,14 @@ task :benchmark do
 
   # - - -
 
+  puts "ruby version: #{RUBY_VERSION}"
+  puts "ruby engine: #{RUBY_ENGINE}"
+  puts "sig version: #{Sig::VERSION}"
+  puts "rubype version: #{Rubype::VERSION}"
+  puts "contracts version: #{Contracts::VERSION}"
+
+  # - - -
+
   class PureSum
     def sum(x, y)
       x + y
@@ -54,7 +62,6 @@ task :benchmark do
     end
   end
   pure_instance = PureSum.new
-  puts "ruby version: #{RUBY_VERSION}"
 
   # - - -
 
@@ -70,7 +77,6 @@ task :benchmark do
     end
   end
   sig_instance = SigSum.new
-  puts "sig version: #{Sig::VERSION}"
 
   # - - -
 
@@ -86,7 +92,6 @@ task :benchmark do
     typesig :mul, [:to_i, :to_i] => Numeric
   end
   rubype_instance = RubypeSum.new
-  puts "rubype version: #{Rubype::VERSION}"
 
   # - - -
 
@@ -104,7 +109,6 @@ task :benchmark do
     end
   end
   contracts_instance = ContractsSum.new
-  puts "contracts version: #{Contracts::VERSION}"
 
   Benchmark.ips do |x|
     x.report("pure"){ |times|

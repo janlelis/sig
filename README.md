@@ -100,6 +100,10 @@ See source(https://github.com/janlelis/sig/blob/master/lib/sig.rb) or specs(http
 
 ## Benchmark (Take with a Grain of Salt)
 
+There is still a lot room for performance improvements. Feel free to suggest some faster implementation to do the type checks (even if it is crazy and not clean, as long it does not add too much "magic", a.k.a does not make debugging harder).
+
+### MRI
+
 ```
 ruby version: 2.2.2
 sig version: 1.0.1
@@ -118,12 +122,62 @@ Calculating -------------------------------------
 
 Comparison:
                 pure:  4660112.0 i/s
-                 sig:   136535.0 i/s - 34.13x slower
+u                sig:   136535.0 i/s - 34.13x slower
               rubype:   112443.6 i/s - 41.44x slower
            contracts:    60698.9 i/s - 76.77x slower
 ```
 
-There is still a lot room for performance improvements. Feel free to suggest some faster implementation to do the type checks (even if it is crazy and not clean, as long it does not add too much "magic", a.k.a does not make debugging harder).
+### JRuby 9000
+
+```
+ruby version: 2.2.0
+ruby engine: jruby
+sig version: 1.0.1
+rubype version: 0.2.5
+contracts version: 0.8
+Calculating -------------------------------------
+                pure   572.000  i/100ms
+                 sig   145.000  i/100ms
+              rubype   431.000  i/100ms
+           contracts   621.000  i/100ms
+-------------------------------------------------
+                pure    569.216k (± 5.4%) i/s -      2.726M
+                 sig     79.023k (±41.0%) i/s -    327.555k
+              rubype     43.376k (±22.8%) i/s -    178.434k
+           contracts     27.798k (±21.6%) i/s -    128.547k
+
+Comparison:
+                pure:   569216.3 i/s
+                 sig:    79022.9 i/s - 7.20x slower
+              rubype:    43376.3 i/s - 13.12x slower
+           contracts:    27798.0 i/s - 20.48x slower
+```
+
+### RBX 2.5.2
+
+```
+ruby version: 2.1.0
+ruby engine: rbx
+sig version: 1.0.1
+rubype version: 0.2.5
+contracts version: 0.8
+Calculating -------------------------------------
+                pure    27.404k i/100ms
+                 sig     1.525k i/100ms
+              rubype   850.000  i/100ms
+           contracts     1.138k i/100ms
+-------------------------------------------------
+                pure     14.157M (±15.4%) i/s -     67.441M
+                 sig     12.413M (±15.2%) i/s -     47.958M
+              rubype     15.101M (± 8.2%) i/s -     62.328M
+           contracts     45.421k (± 4.6%) i/s -    226.462k
+
+Comparison:
+              rubype: 15100890.8 i/s
+                pure: 14157100.4 i/s - 1.07x slower
+                 sig: 12412953.1 i/s - 1.22x slower
+           contracts:    45421.0 i/s - 332.46x slower
+```
 
 ## Deactivate All Signature Checking
 
