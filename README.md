@@ -55,7 +55,7 @@ Nevertheless, nothing is wrong with ensuring specific behaviour of method argume
 
 ### Is this better than rubype?
 
-The rubype gem achieves similar things like sig (and inspired the creation of sig). It offers a different syntax and differs in feature & implementation details, so in the end, it is a matter of taste, which gem you prefer. The performance impact is quite similar (sig version 1.0 vs rubype 0.2.5), run `rake benchmark` for details.
+The rubype gem achieves similar things like sig (and inspired the creation of sig). It offers a different syntax and differs in feature & implementation details, so in the end, it is a matter of taste, which gem you prefer.
 
 ## Setup
 
@@ -100,7 +100,11 @@ See source(https://github.com/janlelis/sig/blob/master/lib/sig.rb) or specs(http
 
 ## Benchmark (Take with a Grain of Salt)
 
+You can run `rake  benchmark` to run [it](https://github.com/janlelis/sig/blob/v1.0.1/Rakefile#L33-L148) on your machine.
+
 There is still a lot room for performance improvements. Feel free to suggest some faster implementation to do the type checks (even if it is crazy and not clean, as long it does not add too much "magic", a.k.a does not make debugging harder).
+
+Note: Starting with 0.3.0, rubype uses a c extensions, which makes it much faster!
 
 ### MRI
 
@@ -129,7 +133,7 @@ u                sig:   136535.0 i/s - 34.13x slower
 
 ### JRuby 9000
 
-jruby 9.0.0.0-SNAPSHOT (2.2.2) 2015-04-21 e7c7beb Java HotSpot(TM) 64-Bit Server VM 24.80-b11 on 1.7.0_80-b15 +jit [linux-amd64]
+jruby 9.0.0.0-SNAPSHOT (2.2.2) 2015-04-21 e7c7beb Java HotSpot(TM) 64-Bit Server VM 24.80-b11 on 1.7.0_80-b15 +indy +jit [linux-amd64]
 
 
 ```
@@ -139,21 +143,21 @@ sig version: 1.0.1
 rubype version: 0.2.5
 contracts version: 0.8
 Calculating -------------------------------------
-                pure    24.189k i/100ms
-                 sig     3.005k i/100ms
-              rubype     2.098k i/100ms
-           contracts     1.228k i/100ms
+                pure    27.670k i/100ms
+                 sig     3.898k i/100ms
+              rubype     3.134k i/100ms
+           contracts   359.000  i/100ms
 -------------------------------------------------
-                pure      1.604M (± 6.3%) i/s -      7.958M
-                 sig     76.308k (± 6.7%) i/s -    378.630k
-              rubype     55.650k (±21.5%) i/s -    226.584k
-           contracts     30.902k (± 8.4%) i/s -    153.500k
+                pure      2.456M (± 9.9%) i/s -     11.870M
+                 sig    146.522k (± 8.4%) i/s -    725.028k
+              rubype     87.784k (±25.2%) i/s -    344.740k
+           contracts     46.683k (±14.0%) i/s -    223.657k
 
 Comparison:
-                pure:  1604103.9 i/s
-                 sig:    76308.0 i/s - 21.02x slower
-              rubype:    55650.0 i/s - 28.82x slower
-           contracts:    30901.9 i/s - 51.91x slower
+                pure:  2455751.2 i/s
+                 sig:   146522.2 i/s - 16.76x slower
+              rubype:    87784.2 i/s - 27.97x slower
+           contracts:    46682.6 i/s - 52.61x slower
 ```
 
 ### RBX 2.5.2
