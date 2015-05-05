@@ -2,6 +2,7 @@ require "benchmark/ips"
 
 require "rubype"
 require "rubype/version"
+require "typecheck"
 require "contracts"
 require "contracts/version"
 require_relative "../lib/sig"
@@ -13,6 +14,7 @@ puts "ruby engine: #{RUBY_ENGINE}"
 puts "ruby description: #{RUBY_DESCRIPTION}"
 puts "sig version: #{Sig::VERSION}"
 puts "rubype version: #{Rubype::VERSION}"
+puts "typecheck version: #{Typecheck::VERSION}"
 puts "contracts version: #{Contracts::VERSION}"
 
 # - - -
@@ -60,6 +62,23 @@ rubype_instance = RubypeSum.new
 
 # - - -
 
+class TypecheckSum
+  extend Typecheck
+
+  typecheck 'Numeric, Numeric -> Numeric',
+  def sum(x, y)
+    x + y
+  end
+
+  typecheck '#to_i, #to_i -> Numeric',
+  def mul(x, y)
+    x * y
+  end
+end
+typecheck_instance = TypecheckSum.new
+
+# - - -
+
 class ContractsSum
   include Contracts
 
@@ -103,6 +122,15 @@ Benchmark.ips do |x|
     end
   }
 
+  x.report("typecheck"){ |times|
+    i = 0
+    while i < times
+      typecheck_instance.sum(1, 2)
+      typecheck_instance.mul(1, 2)
+      i += 1
+    end
+  }
+
   x.report("contracts"){ |times|
     i = 0
     while i < times
@@ -114,3 +142,4 @@ Benchmark.ips do |x|
 
   x.compare!
 end
+
