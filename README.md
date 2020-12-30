@@ -1,4 +1,4 @@
-# `sig`: Optional Type Assertions for Ruby methods. [![[version]](https://badge.fury.io/rb/sig.svg)](http://badge.fury.io/rb/sig)  [![[travis]](https://travis-ci.org/janlelis/sig.png)](https://travis-ci.org/janlelis/sig)
+# `sig`: Optional Type Assertions for Ruby methods. [![[version]](https://badge.fury.io/rb/sig.svg)](http://badge.fury.io/rb/sig)  [![[ci]](https://github.com/janlelis/sig/workflows/Test/badge.svg)](https://github.com/janlelis/sig/actions?query=workflow%3ATest)
 
 This gem adds the `sig` method that allows you to add signatures to Ruby methods. When you call the method, it will verify that the method's arguments/result fit to the previously defined behavior:
 
