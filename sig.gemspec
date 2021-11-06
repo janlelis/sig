@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.summary       = "Optional Type Assertions for Ruby."
   gem.description   = "Optional Type Assertions for Ruby methods."
   gem.authors       = ["Jan Lelis"]
-  gem.email         = "mail@janlelis.de"
+  gem.email         = ["hi@ruby.consulting"]
   gem.homepage      = "https://github.com/janlelis/sig"
   gem.license       = "MIT"
 
