@@ -13,7 +13,7 @@ jobs:
         - 3.0
         - 2.7
         - 2.6
-        - jruby-9.3.1.0
+        - jruby-9.3.2
         - truffleruby-21.3.0
         os:
         - ubuntu-latest
