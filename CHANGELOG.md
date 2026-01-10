@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### 1.0.3
+
+* Relax Ruby version requirement to allow Ruby 4.0
+
 ### 1.0.2
 
 * Relax Ruby version requirement to allow Ruby 3.0
